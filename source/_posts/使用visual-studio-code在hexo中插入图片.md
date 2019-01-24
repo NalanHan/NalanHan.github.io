@@ -12,13 +12,17 @@ date: 2019-01-22 09:33:55
 下面介绍一下如何针对`hexo`设置`Past Image`：
 
 # 要实现的功能
+
 `hexo`保存静态文件的文件夹是`source`，生成网站的时候，会把`source`文件夹下的文件原样拷贝到网站的根目录下。
 现在的设想是，在`source`下新建一个`images`文件夹，保存图片的时候自动在`images`下新建一个和博客文章同名的目录，并把图片保存到里边。
 
 # 安装xclip
+
 `sudo apt install xclip`
 `xclip`是Linux下读取剪贴板内容的软件，有些linux没有安装，需要先安装上。
+
 # 设置`Past Image`
+
 1、按`ctrl`+`,`,打开vscode的自定义选项界面，并输入past image,如下图：
 ![opensettings](/images/使用visual-studio-code在hexo中插入图片/opensettings.png)
 <!-- more -->
@@ -37,6 +41,7 @@ date: 2019-01-22 09:33:55
 6、找到`Insert Pattern`，修改成`![${imageFileNameWithoutExt}](/${imageFilePath})`，如下图：
 ![insertpattern](/images/使用visual-studio-code在hexo中插入图片/insertpattern.png)
 解释下上面的参数的意义:
+
 - 图片链接采用标准的markdown语法，即`![imagename](path/to/file)`的格式。
 - `${imageFileNameWithoutExt}`是插入不带后缀的图片名称，比如`test.png`这个图片只插入名称`test`，不插入后缀`.png`。
 - `/${imageFilePath}`这个参数需要分两部分说：
