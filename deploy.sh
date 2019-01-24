@@ -8,6 +8,7 @@ fi
 
 cd ~/blog
 
+
 # Build the project. 
 hexo g 
 proxychains4 hexo d
