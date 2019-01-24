@@ -13,8 +13,8 @@ date: 2018-05-19 16:32:01
 
 等来看两张图：
 
-![excel1](../images/Excel修改默认字体的正确方法/excel1.png)
-![excel2](../images/Excel修改默认字体的正确方法/excel2.png)
+![excel1](/images/Excel修改默认字体的正确方法/excel1.png)
+![excel2](/images/Excel修改默认字体的正确方法/excel2.png)
 
 一个是新建工作簿，一个是新建工作表，这两个是不一样的。
 
