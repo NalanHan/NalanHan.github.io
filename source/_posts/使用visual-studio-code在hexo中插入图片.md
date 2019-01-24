@@ -42,6 +42,7 @@ date: 2019-01-22 09:33:55
 - `/${imageFilePath}`这个参数需要分两部分说：
   - `/`是图片链接采用绝对路径，`Past Image`默认插入图片不会带`/`，这里手动插入。
   - `${imageFilePath}`是图片的路径。因为我们在第2步里已经设置了`base path`为`${projectRoot}/source`，所以这里只填`${imageFilePath}`就可以了。如果`base path`不是像第2步里那样设置的，需要自行调整。
+
 7、找到`Path`，设置成`${projectRoot}/source/images/${currentFileNameWithoutExt}/`，如下图：
 ![path](/images/使用visual-studio-code在hexo中插入图片/path.png)
 这是设置图片保存的路径，`${currentFileNameWithoutExt}`，是生成和当前博客文章同名的文件夹且不带`.md`的后缀。
