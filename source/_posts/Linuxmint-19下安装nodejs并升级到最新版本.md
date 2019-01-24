@@ -5,20 +5,23 @@ tags: [nodejs,linuxmint]
 abbrlink: f982b26b
 date: 2018-12-22 18:59:36
 ---
-1、安装系统自带的nodejs
+
+1、安装系统自带的 nodejs
 
 `sudo apt install nodejs`
 
-2、安装npm
+2、安装 npm
 
 `sudo apt install npm`
 
-3、给npm设置淘宝源,速度快
+3、给 npm 设置淘宝源,速度快
 
 `sudo npm config set registry https://registry.npm.taobao.org`
 
 4、查看下配置是否生效
+
 <!--more-->
+
 `sudo npm config list`
 
 更多的介绍查看[这篇文章](https://www.yufael.com/posts/ef248641.html)
