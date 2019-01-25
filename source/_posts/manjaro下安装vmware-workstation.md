@@ -1,7 +1,7 @@
 ---
 title: manjaro下安装vmware workstation
 categories: 操作系统
-tags: 'vmware,manjaro,kernel'
+tags: [vmware,manjaro,kernel]
 abbrlink: 72c3c316
 date: 2019-01-25 14:17:30
 ---

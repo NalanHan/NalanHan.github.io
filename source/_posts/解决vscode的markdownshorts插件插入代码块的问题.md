@@ -1,7 +1,7 @@
 ---
 title: 解决vscode的markdownshorts插件插入代码块的问题
 categories: 软件应用
-tags: 'vscode,markdown'
+tags: [vscode,markdown]
 abbrlink: f0e99280
 date: 2019-01-25 06:20:33
 ---
