@@ -26,6 +26,8 @@ date: 2019-01-25 14:17:30
 `pamac build vmware-workstation`
 **注**：最好挂上代理，不然下载很慢。
 
+<!-- more -->
+
 # 设置 wmvware workstation
 
 ## 启动 vmware workstation 的系统服务
