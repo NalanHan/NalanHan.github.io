@@ -1,8 +1,11 @@
 ---
 title: 解决manjaro用vscode替代nautilus的问题
-date: 2019-01-26 08:51:22
 categories: 操作系统
-tags:[manjaro,vscode]
+tags:
+  - manjaro
+  - vscode
+abbrlink: 16a572fa
+date: 2019-01-26 08:51:22
 ---
 
 在 manjaro 下安装完 vscode 后，发现打开文件夹的默认程序从`nautilus`变成了 vscode 了。一番搜索，找到了解决方案：
