@@ -12,7 +12,7 @@ cd ~/blog
 hexo g 
 proxychains4 hexo d
 
-# Push Hugo content 
+# Push Hexo content 
 git add -A
 git commit -m "$msg"
 proxychains4 git push  origin source
