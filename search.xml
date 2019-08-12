@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title><![CDATA[ubuntu及其衍生版中英文字体设置]]></title>
+    <url>%2Fposts%2Fb52a3d62.html</url>
+    <content type="text"><![CDATA[对 ubuntu 及其衍生版来说，中文字体的显示效果在技术层面上已经很完美了，之所以看到字体显示效果有区别，更多的原因是在于你所用的字体。 对于我来说，非常看不习惯现在主流发行版(包括 ubuntu)的默认中文字体noto系列，总感觉它的笔划是歪的。 以我的审美来看，在 linux 下，微软雅黑显示效果绝对排第一，wqy microhei 排第二，其他的字体显示效果都比较差。 下面就以微软雅黑为例，系统介绍下ubuntu如何配置字体（注意字体版权）。 字体显示的技术层面前面已经说到，ubuntu 在技术层面上，已经把中文字体显示的问题解决了。 什么意思呢？就是说现在配置字体，已经不需要像以前一样，去调整fontconfig、freetype这些底层的东西了。 ubuntu 已经把这些都设置好了，而且效果很完美，起码对于雅黑和wqy microhei来说是这样。 所以，现在的的配置字体，就是保证 ubuntu 能够正确的使用你所选择的字体。 字体优先级配置查看字体优先级澄清一下，不是说你用gnome-tweaks之类的工具或者在控制中心里，在字体选项里选中雅黑就可以了。 这样做，只是把部分界面调整为雅黑，很多软件并不会使用控制中心里的字体设置。 要查看系统到底优先使用什么字体，需要使用fc-match命令： 123fc-match sans #查看sans字体族的默认字体fc-match serif #查看serif字体族的默认字体fc-match monospace #查看monospace字体族的默认字体 查看输入结果，就能知道 sans、serif 和 monospace 这三个字体族到底优先使用什么字体了。 设置字体优先级对所有的 ubuntu 来说，你需要关注的字体配置文件有两个，都在/etc/fonts/conf.d里面： 64-language-selector-prefer.conf 69-language-selector-zh-cn.conf 这两个字体配置文件，关系到系统的 sans、serif、和 monospace 这三种字体的优先使用级别。 调整方法也很简单，只需要把你想使用的字体放在每一个字体族下的第一行就可以，两个文件都要调整。 英文等宽字体也是一样，放在 monospace 下的第一行。 以下字体文件配置，sans 和 serif 都使用了微软雅黑，monospace 使用了 dejavu sans mono： 1、64-language-selector-prefer.conf 1234567891011121314151617181920212223242526272829303132333435&lt;?xml version="1.0"?&gt;&lt;!DOCTYPE fontconfig SYSTEM "fonts.dtd"&gt;&lt;fontconfig&gt; &lt;alias&gt; &lt;family&gt;sans-serif&lt;/family&gt; &lt;prefer&gt; &lt;family&gt;Microsoft YaHei&lt;/family&gt; &lt;family&gt;Noto Sans CJK JP&lt;/family&gt; &lt;family&gt;Noto Sans CJK KR&lt;/family&gt; &lt;family&gt;Noto Sans CJK SC&lt;/family&gt; &lt;family&gt;Noto Sans CJK TC&lt;/family&gt; &lt;family&gt;Noto Sans CJK HK&lt;/family&gt; &lt;/prefer&gt; &lt;/alias&gt; &lt;alias&gt; &lt;family&gt;serif&lt;/family&gt; &lt;prefer&gt; &lt;family&gt;Microsoft YaHei&lt;/family&gt; &lt;family&gt;Noto Serif CJK JP&lt;/family&gt; &lt;family&gt;Noto Serif CJK KR&lt;/family&gt; &lt;family&gt;Noto Serif CJK SC&lt;/family&gt; &lt;family&gt;Noto Serif CJK TC&lt;/family&gt; &lt;/prefer&gt; &lt;/alias&gt; &lt;alias&gt; &lt;family&gt;monospace&lt;/family&gt; &lt;prefer&gt; &lt;family&gt;Dejavu Sans Mono&lt;/family&gt; &lt;family&gt;Noto Sans Mono CJK KR&lt;/family&gt; &lt;family&gt;Noto Sans Mono CJK SC&lt;/family&gt; &lt;family&gt;Noto Sans Mono CJK TC&lt;/family&gt; &lt;family&gt;Noto Sans Mono CJK HK&lt;/family&gt; &lt;/prefer&gt; &lt;/alias&gt;&lt;/fontconfig&gt; 2、69-language-selector-zh-cn.conf 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263&lt;?xml version="1.0"?&gt;&lt;!DOCTYPE fontconfig SYSTEM "fonts.dtd"&gt;&lt;fontconfig&gt; &lt;match target="pattern"&gt; &lt;test name="lang"&gt; &lt;string&gt;zh-cn&lt;/string&gt; &lt;/test&gt; &lt;test qual="any" name="family"&gt; &lt;string&gt;serif&lt;/string&gt; &lt;/test&gt; &lt;edit name="family" mode="prepend" binding="strong"&gt; &lt;string&gt;Microsoft YaHei&lt;/string&gt; &lt;string&gt;Noto Serif CJK SC&lt;/string&gt; &lt;string&gt;HYSong&lt;/string&gt; &lt;string&gt;AR PL UMing CN&lt;/string&gt; &lt;string&gt;AR PL UMing HK&lt;/string&gt; &lt;string&gt;AR PL New Sung&lt;/string&gt; &lt;string&gt;WenQuanYi Bitmap Song&lt;/string&gt; &lt;string&gt;AR PL UKai CN&lt;/string&gt; &lt;string&gt;AR PL ZenKai Uni&lt;/string&gt; &lt;/edit&gt; &lt;/match&gt; &lt;match target="pattern"&gt; &lt;test qual="any" name="family"&gt; &lt;string&gt;sans-serif&lt;/string&gt; &lt;/test&gt; &lt;test name="lang"&gt; &lt;string&gt;zh-cn&lt;/string&gt; &lt;/test&gt; &lt;edit name="family" mode="prepend" binding="strong"&gt; &lt;string&gt;Microsoft YaHei&lt;/string&gt; &lt;string&gt;Noto Sans CJK SC&lt;/string&gt; &lt;string&gt;WenQuanYi Zen Hei&lt;/string&gt; &lt;string&gt;HYSong&lt;/string&gt; &lt;string&gt;AR PL UMing CN&lt;/string&gt; &lt;string&gt;AR PL UMing HK&lt;/string&gt; &lt;string&gt;AR PL New Sung&lt;/string&gt; &lt;string&gt;AR PL UKai CN&lt;/string&gt; &lt;string&gt;AR PL ZenKai Uni&lt;/string&gt; &lt;/edit&gt; &lt;/match&gt; &lt;match target="pattern"&gt; &lt;test qual="any" name="family"&gt; &lt;string&gt;monospace&lt;/string&gt; &lt;/test&gt; &lt;test name="lang"&gt; &lt;string&gt;zh-cn&lt;/string&gt; &lt;/test&gt; &lt;edit name="family" mode="prepend" binding="strong"&gt; &lt;string&gt;DejaVu Sans Mono&lt;/string&gt; &lt;string&gt;Noto Sans Mono CJK SC&lt;/string&gt; &lt;string&gt;WenQuanYi Zen Hei Mono&lt;/string&gt; &lt;string&gt;HYSong&lt;/string&gt; &lt;string&gt;AR PL UMing CN&lt;/string&gt; &lt;string&gt;AR PL UMing HK&lt;/string&gt; &lt;string&gt;AR PL New Sung&lt;/string&gt; &lt;string&gt;AR PL UKai CN&lt;/string&gt; &lt;string&gt;AR PL ZenKai Uni&lt;/string&gt; &lt;/edit&gt; &lt;/match&gt;&lt;/fontconfig&gt; 注销之后，使用fc-match查看效果。 英文等宽字体选择英文等宽字体推荐dejavu sans mono。它最大的优点是中文和英文字体的大小比较协调。不像ubuntu mono一样，英文字体偏小，调大字号后中文字体又太大。 删除不需要的字体配置如果配置完后，使用fc-match发现并没有如预想的一样使用所选字体，那就要注意一下/etc/fonts/conf.d其它的字体配置文件了。 在 ubuntu 里，会单独给一些字体设置一些配置文件，同样存放在/etc/fonts/conf.d里，比如 wqy、arphic-uming、arphic-ukai`等。 这里需要特别注意64-arphic-uming.conf这个文件，必须删除或者改后缀名让其不生效，否则调整 serif 字体族这一项不会生效。 可选操作：雅黑字体处理直接拷贝安装 windows 10 下的雅黑字体，效果已经不错了，但是可以对雅黑字体做进一步处理，让其显示效果更好。 处理方法拷贝 windows 10 下的微软雅黑，注意有三个：msyh.ttc、msyhbd.ttc、msyhl.ttc。 然后去网上找字体去hint工具，把雅黑字体的 hint 信息去掉后，再安装到 ubuntu 里。 ps：处理完后，雅黑字体在 2k 屏的 windows 下效果也比原来强多了，基本能达到 mactype 的水平。 总结字体配置，是一个很个人的东西，同样的字体和字体配置，有些人觉得好看，有些人就觉得难看。 其实本文通篇就讲了一个字体优先级配置的问题。方法是通用的，希望看完后，所有人都能正确设置自己中意的字体。]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>font</tag>
+        <tag>ubuntu</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Xubuntu 18.04使用设置]]></title>
+    <url>%2Fposts%2F19337d22.html</url>
+    <content type="text"><![CDATA[电脑比较旧了，Intel I5-4790 的 CPU。在使用 ubuntu18.04 的时候，总是感觉 gnome 使用起来不流畅，有些拖延和卡顿，于是换用 xubuntu 18.04。 从目前的使用体验来看，非常满意，用着比 ubuntu 顺手。 下面记录一下使用 xubuntu 的一些设置和调整。 输入法xubuntu 默认安装 fcitx 输入法，并且配置好了 fcitx-qimpanel 的三套皮肤。 fcitx-qimpanel 所带的皮肤位于/usr/share/fcitx-qimpanel/skin/，如果想修改字体，需要在这里修改。 字体配置看我写的这篇文章。里面介绍的非常清楚了，不会的话直接抄配置就可以。 高分辨率屏幕（Hi-DPI）设置其实就是修改设置-外观-字体下面的 dpi，嫌字体小就把 dpi 调大一点。 更改快捷键在设置-键盘-应用程序快捷键里调整，一目了然。 需要注意的是显示桌面这个快捷键，是在设置-窗口管理器-键盘里调整的，默认是 ctrl+alt+D。 主题推荐使用 parrot 的主题，虽然是用于 mate 桌面，但是 xubutu 可以完美使用。 下载址：parrot-themes。 交换 ctrl 和 capsxubuntu 没有比较方便的更改按键的工具，比如交换 ctrl 和 caps。 可以使用配置文件修改：1、打开/etc/default/keyboard sudo vi /etc/default/keyboard 2、修改XKBOPTIONS这一项，添加ctrl:swapcaps来交换 ctrl 和 caps，如下： XKBOPTIONS=&quot;ctrl:swapcaps&quot; 3、然后运行sudo dpkg-reconfigure keyboard-configuration来保存配置。 注意，在保存配置时，问到是否使用新的配置时，选择是。]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>xubuntu</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[虚拟机里使用宿主机的代理]]></title>
+    <url>%2Fposts%2F8aa72d5d.html</url>
+    <content type="text"><![CDATA[本文的目标是在虚拟机里使用宿主机的 ss 代理。 前提条件1、虚拟机的网卡使用 NAT 模式。2、宿主机的 ss 代理打开“允许其他设备连入” 具体操作1、查看虚拟机的 IP 地址，假设为 192.168.a.b,2、打开虚拟机的网络设置，找到“代理”这一项，设置代理为 192.168.a.1，端口填写宿主机的本地监听端口，ss 代理一般为 1080 这样就可以了。 虚拟机使用宿主机的代理，好处是可以设置全局代理，在使用一些 powershell 脚本安装软件的时候，直接可以让 powershell 使用代理，比较快速和方便。]]></content>
+      <categories>
+        <category>网络服务</category>
+      </categories>
+      <tags>
+        <tag>vmware</tag>
+        <tag>proxy</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Deepin安装nodejs和npm]]></title>
+    <url>%2Fposts%2F88ba13f2.html</url>
+    <content type="text"><![CDATA[最新版本的deepin是基于debian stable的，官方的安装方法不再支持，所以在nodejs和npm的安装上和ubuntu有一些区别。 安装nodejs和node1sudo apt install node nodejs 在这里，安装node这个软件包，是为了提供npm这个命令工具。debian和ubuntu不同，没有提供单独的npm包，而是在node这个软件包里提供的。 修改源和使用n来提供升级参考这篇文章]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>deepin</tag>
+        <tag>nodejs</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Deepin 15.10交换ctrl和caps]]></title>
+    <url>%2Fposts%2Ffedbf5d6.html</url>
+    <content type="text"><![CDATA[Deepin采用自己的dde窗口管理器，没有像ubuntu里的gnome-tweaks一样，提供图形界面的交换ctrl和caps的方法，不过可以用一条命令达到同样的目的。1gsettings set com.deepin.dde.keyboard layout-options &apos;[&quot;ctrl:swapcaps&quot;]&apos; 重启后一样有效。]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>deepin</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[LInux下使用交换分区文件替代交换分区]]></title>
+    <url>%2Fposts%2F982921b1.html</url>
+    <content type="text"><![CDATA[现在计算机的内存越来越大,交换分区存在的意义也就越来越小了。像 ubuntu，从 18.04 开始已经取消了交换分区,使用交换分区文件来替代。下面介绍如何在 linux 操作系统上使用交换分区文件替代交换分区。 增加交换分区文件依次执行下面的命令，来新建启用交换分区 新建交换分区文件，大小为 1G：（bs*count=文件大小）sudo dd if=/dev/zero of=/swapfile bs=1M count=1024 格式化交换分区文件：sudo mkswap /swapfile 启用交换分区文件：sudo swapon /swapfile 开机自动挂载:sudo vi /etc/fstab添加下面内容:/swapfile swap swap defaults 0 0 验证是否有交换分区free -m 移除 swap 分区文件执行下面的命令： sudo swapoff /swapfile &amp;&amp; sudo rm /swapfile]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>swap</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[解决manjaro用vscode替代nautilus的问题]]></title>
+    <url>%2Fposts%2F16a572fa.html</url>
+    <content type="text"><![CDATA[在 manjaro 下安装完 vscode 后，发现打开文件夹的默认程序从nautilus变成了 vscode 了。一番搜索，找到了解决方案： 修改 mineapps.listvi ~/.config/mimeapps.list在[default Applications]下添加一行：inode/directory = org.gnome.Nautilus.desktop 问题解决]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>manjaro</tag>
+        <tag>vscode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[manjaro下安装vmware workstation]]></title>
+    <url>%2Fposts%2F72c3c316.html</url>
+    <content type="text"><![CDATA[在 manjaro linux 下，可以通过 aur 安装 wmware workstation。 安装 manjaro 内核头文件默认情况下，manjaro 并没有安装 linux-headers，需要先安装好才能编译 vmware 的各种内核模块。 查看内核版本uname -r 安装内核文件sudo pacman -S linux-headers根据你的内核版本，选择对应的内核头文件来安装。 安装 vmware workstationpamac build vmware-workstation注：最好挂上代理，不然下载很慢。 设置 wmvware workstation启动 vmware workstation 的系统服务123sudo systemctl start vmware-networks.service #启动网络模块服务sudo systemctl start vmware-usbarbitrator.service #启动usb挂载服务sudo systemctl start vmware-hostd.service #启动共享服务 设置系统服务开机自动启动123sudo systemctl enable vmware-networks.servicesudo systemctl enable vmware-usbarbitrator.servicesudo systemctl enable vmware-hostd.service]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>vmware</tag>
+        <tag>manjaro</tag>
+        <tag>kernel</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[解决vscode的markdownshorts插件插入代码块的问题]]></title>
+    <url>%2Fposts%2Ff0e99280.html</url>
+    <content type="text"><![CDATA[markdown shortcuts是vscode编辑markdown文件必备的插件，最近在使用中发现它的一个bug：使用ctrl+m ctrl+c插入代码块的时候，它自动在代码块的前后加上了auto，很烦人： 这显然不要我想要的，我期待的是这种格式： 通过与作者的交流，发现这是由于最近vscode的一些改变造成的。 要解决这个问题，需要在vscode中做一些设置：在vscode中，打开File &gt; Preferences &gt; Settings，搜索eol，把eol从auto变成\n即可：]]></content>
+      <categories>
+        <category>软件应用</category>
+      </categories>
+      <tags>
+        <tag>vscode</tag>
+        <tag>markdown</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[使用visual studio code在hexo中插入图片]]></title>
+    <url>%2Fposts%2F50952d2f.html</url>
+    <content type="text"><![CDATA[Visual studio code有一个Past Image插件，它的作用是直接把剪贴版的图像保存到设定的位置，并把链接插入到 markdown 文件里，非常方便。但是这个插件需要一些设置才能适配不同的博客系统，比如它针对 hexo 和 hexo 的设置就不一样。下面介绍一下如何针对hexo设置Past Image： 要实现的功能hexo保存静态文件的文件夹是source，生成网站的时候，会把source文件夹下的文件原样拷贝到网站的根目录下。现在的设想是，在source下新建一个images文件夹，保存图片的时候自动在images下新建一个和博客文章同名的目录，并把图片保存到里边。 安装 xclipsudo apt install xclipxclip是 Linux 下读取剪贴板内容的软件，有些 linux 没有安装，需要先安装上。 设置Past Image1、按ctrl+,,打开 vscode 的自定义选项界面，并输入 past image,如下图： 2、找到Default Name，设置成MM：默认的年-月-日-时-分-秒格式太长了，修改名字不方便，这里只显示两个数字的月份。3、找到Encode Path,设置成urlEncodeSpace:这是为了能够正确渲染图片文件路径和名称中的空格。4、找到base path这一项，设置成${projectRoot}/source，如下图：5、找到File Path Confirm Input Box Mode，这一项，设置成onlyName，如下图：设置成onlyName而不是fullPath,是只显示图片名称而不包含路径。和第 2 步类似，同样是为了方便修改所生成图片的名字。6、找到Insert Pattern，修改成![${imageFileNameWithoutExt}](/${imageFilePath})，如下图：解释下上面的参数的意义: 图片链接采用标准的 markdown 语法，即![imagename](path/to/file)的格式。 ${imageFileNameWithoutExt}是插入不带后缀的图片名称，比如test.png这个图片只插入名称test，不插入后缀.png。 /${imageFilePath}这个参数需要分两部分说： /是图片链接采用绝对路径，Past Image默认插入图片不会带/，这里手动插入。 ${imageFilePath}是图片的路径。因为我们在第 2 步里已经设置了base path为${projectRoot}/source，所以这里只填${imageFilePath}就可以了。如果base path不是像第 2 步里那样设置的，需要自行调整。 7、找到Path，设置成${projectRoot}/source/images/${currentFileNameWithoutExt}/，如下图：这是设置图片保存的路径，${currentFileNameWithoutExt}，是生成和当前博客文章同名的文件夹且不带.md的后缀。8、选中Show File Path Confirm Input Box这一项：这是为了在保存图片的时候能够修改文件名，不然的话只能以第 2 步里设置名称保存图片了。就像下图的效果一样： 设置完毕。直接按ctrl+alt+v，就能把剪贴板的图像直接保存到指定位置并把链接插入到 markdown 里了。你需要做的只是修改一下图片文件名。]]></content>
+      <categories>
+        <category>软件应用</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+        <tag>vscode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[ubuntu安装设置tilix终端]]></title>
+    <url>%2Fposts%2F4d5cdca7.html</url>
+    <content type="text"><![CDATA[tilix 是 linux 下的一种平铺式的终端应用程序。平铺式是指它可以在同一个窗口内平铺式的显示多个 shell，这样在需要多个 shell 之间对比调试的的时候就显得非常方便了。tilix 内置了多种主题，可以说是开箱即用。 安装 tlixsudo apt install tilix 设置 tilix官方提示在开始使用前，需要做一些设置来解决一些小问题： 编辑~/.bashrc（如果是 zsh 就编辑~/.zshrc）在文件的最后添加如下内容： if [ $TILIX_ID ] || [ $VTE_VERSION ]; then source /etc/profile.d/vte.sh fi 建立链接sudo ln -s /etc/profile.d/vte-2.91.sh /etc/profile.d/vte.sh 更新 bash 配置source ~/.bashrc 设置 tilix 为 gnome 默认的终端sudo update-alternatives --config x-terminal-emulator根据提示选择 tilix 对应的数字,如图：]]></content>
+      <categories>
+        <category>软件应用</category>
+      </categories>
+      <tags>
+        <tag>terminal</tag>
+        <tag>tilix</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[使用privoxy把socks5 proxy转换成http proxy]]></title>
+    <url>%2Fposts%2F4ee7cd3d.html</url>
+    <content type="text"><![CDATA[最近在使用 atom 的时候让网络给恶心到了,apm 安装软件时经常连接失败。如果使用代理，则 atom 只支持 http 代理，而常用代理都是 socks5 的。因此就有了本文，通过 privoxy 把 socks5 的代理转换成 http 代理。 安装sudo apt install privoxy 配置sudo vi /etc/privoxy/config在文件的最后添加下面的内容： 1forward-socks5 / 127.0.0.1:1080 . 注意，上行配置最后有个点，别漏了。 启动12sudo systemctl start privoxysudo systemctl enable privoxy 使用export http_proxy=http://127.0.0.1:8118 &amp;&amp; curl ip.gs看看 ip 地址是否为代理的 ip，如果是，则说明转换成功了。]]></content>
+      <categories>
+        <category>网络服务</category>
+      </categories>
+      <tags>
+        <tag>proxy</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Ubuntu英文版使用指南]]></title>
+    <url>%2Fposts%2Fa8dea4d2.html</url>
+    <content type="text"><![CDATA[之所以要使用英文版的 Ubuntu 操作系统，原因有两个：1、锻炼自己的英文水平2、ubuntu 英文版的字体渲染，无论是渲染英文字体还是中文字体，都比中文版的要漂亮很多。 下面以 ubuntu 18.04 为例，介绍一些相关的设置。 系统字体设置看我写的这篇文章 中文输入法设置在 Ubuntu 下可以正常使用 fcitx 输入法。 安装 fcitxsudo apt install fcitx fcitx-table-wbpy 设置 fcitx1、打开Settings–&gt;Region &amp; Language–&gt;Manage Installed Language，在最下方的Keyboard input method system里，选中 fcitx： 然后重启操作系统，不然会打不开 fcitx 输入法设置。 2、 在 fcitx 里添加中文输入法，比如 wbpy（五笔拼音）。 安装完毕，可以像中文版系统一样使用 fcitx，没有任何区别。 系统美化设置美化也就是设置主题、图标、壁纸之类的东西，漂亮的主题让人心情愉悦，间接提高工作效率。 必备的插件1、安装chrome-gnome-shellsudo apt install chrome-gnome-shell这个是必备的，没有这个软件，使用 firefox 无法在线安装扩展。不要被名字欺骗，firefox 也是用这个。 2、 安装User Themes安装地址这个也是必备的，用来在gnome-tweaks里更改shell主题。 3、 安装Dash to Panel下载地址这个基本上算是必备的，作用是把左侧 dash 和上方的菜单栏挪到底部并统一起来，看下图： 主题和图标 主题：Ant-Nebula这个主题色彩明快，对比分明，右上角三个图标是仿 mac 格式的。 图标：Vimix这个图标算是还满意吧，没找到更好看的前先用它。]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>font</tag>
+        <tag>ubuntu</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[kali下oracle java安装与字体设置]]></title>
+    <url>%2Fposts%2F46a183b4.html</url>
+    <content type="text"><![CDATA[本文中的操作，都是基于 kali 2018.4 版本，不排除随着版本更新失效的可能。 kali 下安装 oracle javakali 自带的 openjdk 版本太新了，有些好用的旧软件并不能很好的运行;而且 openjdk 在某些方面有兼容性的问题,不如 oracle 官方的 java 稳定。因此,在 kali 里安装 oracle 的 java 8 是一个很好的选择. 在这里,采取 ubuntu 的 ppa 的方式安装. 设置 ppa 软件源vi /etc/apt/sources.list.d/java.list 添加下面的内容： 12deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty maindeb-src http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main 添加 ppa 的 keyapt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EEA14886 安装 oracle java 812apt-get updateapt-get install oracle-java8-installer 写本文时最新的 java8 版本是 191. 这样安装完成后，会自动把 oracle java 8 设置为系统默认的 java。 可以用下面命令查看 java 的版本：java -version 设置 java 的字体在 kali 中，java 程序的默认字体极其难看，字体毛边现象十分严重，基本上没法看。 在网上找了大量的中文资料，都是过时的。有些还写的十分认真，但是照着做了之后，一点效果没用。最后还是通过英文搜索找到了答案。在此分享给中文用户。 想让 java 字体变得好看，有三个步骤。 删除 65-nonlatin.conf这个文件位于/etc/fonts/conf.d里。此文件不删除，基本上是不可能让 java 字体变得漂亮的。所以先删除了它。 添加关于 java 字体效果的环境变量vi /etc/environment 添加下面的内容： _JAVA_OPTIONS=&#39;-Dawt.useSystemAAFontSettings=gasp&#39; 上面这条命令请一定添加在/etc/environment里，不要添加在~/.bashrc里。这么做的目的是让 java 的字体设置对所有的 java 程序都有效。 同时，上面的命令还有其他选择，比如 参数 描述 off, false, default No anti-aliasing on Full anti-aliasing gasp Use the font’s built-in hinting instructions lcd, lcd_hrgb Anti-aliasing tuned for many popular LCD monitors lcd_hbgr, lcd_vrgb, lcd_vbgr Alternative LCD monitor setting 一般来说,使用gasp或者lcd都可以,根据具体的显示效果来定. 设置系统的默认中文字体这里的默认字体，不是通过控制中心的字体选项来查看的,而是用fc-match来查看: 1234fc-match sansfc-match seriffc-match sans-seriffc-match monospace 在终端里运行上面四条命令,查看默认的中文字体是什么. 对 java 起作用的是 sans 字体的默认值. 这里说一个结论:linux 下常用的字体中,微软雅黑和 noto-cjk 这两种中文字体怎么调都没法看,只有文泉驿(wqy)字体的效果最好,所以一定要把文泉设置为默认字体. 通过上面三个步骤,你的 java 程序的中文字体就很漂亮了.]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>kali</tag>
+        <tag>java</tag>
+        <tag>font</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Linuxmint 19下安装nodejs并升级到最新版本]]></title>
+    <url>%2Fposts%2Ff982b26b.html</url>
+    <content type="text"><![CDATA[1、安装系统自带的 nodejs sudo apt install nodejs 2、安装 npm sudo apt install npm 3、给 npm 设置淘宝源,速度快 sudo npm config set registry https://registry.npm.taobao.org 4、查看下配置是否生效 sudo npm config list 更多的介绍查看这篇文章 5、安装更新版本的工具n sudo npm install n -g 6、安装最新的长期支持版 sudo n lts 更新工具n的其他操作命令： 123456sudo n 10.13.0 //安装指定的nodejs版本sudo n rm 11.0.0 //删除指定的Nodejs版本n //查看已安装的版本，然后按上下键来切换版本sudo n latest //安装最新的版本sudo n stable //安装最新稳定版sudo n lts //安装最新长期支持版本]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>nodejs</tag>
+        <tag>linuxmint</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[vmware在Linux作为Host下的键盘映射的问题]]></title>
+    <url>%2Fposts%2Fd1f98bbb.html</url>
+    <content type="text"><![CDATA[长久以来，在 Linux 使用 vmware 总是有个问题没有解决。 当在 Linux 里把 CTRL 和 CapsLock 这两个键互换后，vmware 的虚拟机里并不会跟着一起换，而依旧是原来的键位。同样的问题在 Windows 下就不存在。 今天，通过多方查找和实验，此问题终于完美解决，记录一下。 vmware 的官方文档解释： Workstation Player 可通过检查当前的 X 键映射确定要使用的表。但这种决策过程有时也会失败。另外，每个映射都是固定的，不保证对任何给定的键盘和 X 按键代码-键盘符号映射都正确无误。例如，如果用户使用 xmodmap 互换 Ctrl 和 Caps Lock 按键，那么在使用远程服务器时虚拟机中的按键将互换（键盘符号映射），但在使用本地服务器时将取消互换（按键代码映射）。为了修正此问题，您必须在 Workstation Player 中重新映射按键。 也就是说，在本机上修改了键位，远程连接的 vmware 虚拟机里是正常的，本机上的虚拟机则不能使用。 问题的解决官方给出的解决方案是： 查看特定键位的值使用xev或者xmodmap -pk查看 Ctrl 和 CapsLock 的键位值可以看出，left Ctrl 键的值是 66,而 CapsLock 键的值是 37 查看键位对应的 V-Scan 值到V-Scan Code Table去查看。直接告诉大家：Left Ctrl 的值是 0x01dCapsLock 的值是 0x03a 添加配置文件在~/.vmware/config（没有就新建一个）里添加如下配置： xkeymap.keycode.66 = 0x01d xkeymap.keycode.37 = 0x03a 至此，工作全部完成，vmware 里的虚拟机可以使用和 Host 一样的键位设置了。 踩过的大坑这么简单的一个问题，官方文档有明确的说明了，为什么拖了好几年没解决呢？ 主要问题有两个： 1、官方的文档里说，更改健位值的两行代码，加在虚拟机配置文件里(.vmx)或者~/.vmware/config都可以，其实不对。这两行代码只能加在~/.vmware/config，加在其他地方不起作用。这个坑是长期未解决此问题的主要原因。 2、添加这两行配置后，最好是重新启动系统，以便让 vmware 服务彻底重启。我不知道这有没有必要，反正我是重启了。]]></content>
+      <categories>
+        <category>软件应用</category>
+      </categories>
+      <tags>
+        <tag>vmware</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[记第一次马拉松赛]]></title>
+    <url>%2Fposts%2Fac79b07e.html</url>
+    <content type="text"><![CDATA[几天前，我参加了人生中的第一场马拉松比赛。 不知道从什么地方看到的，或者就是我自己心里回荡的想法————人生需要一场马拉松。 参赛的起源也是带有偶然性。今年中旬，我开始跑步健身和瘦身，每天晚上跑6公里左右。随着我的身体的活跃，思维也跟着活跃起来，一个偶然的机会，在朋友圈里知道要举办马拉松的消息，当时就种了草————我要参加。 对于我来说，马拉松是一场挑战。因此，从一开始我就把半马和迷马排除在外了，要跑就跑全马，不然还谈什么挑战呢？ 以前从来没跑过全马，但是我对自己还是有信心的，来源于我上学时期热爱踢球，而跑步是我最爱的健身方式，再加上对自己的耐力也有自信，因此，尽管以前最多一次性跑过10公里，我还是有信心能够跑完全程。 但是，最终的结果是，我跑了30公里，无奈弃赛了。 回顾一下赛程。在前15公里的时候，对于我来说没有任何挑战。平均配速在7’30”左右。当时我的想法是很乐观的————剩下的路，我走也走完了。没想到的是，过了15公里，体力开始断崖式的下降。17公里后，就开始半走半跑了。22公里的时候，已经开始迈不动腿了。到了30公里的时候，无论怎么坚持，怎么鼓励，我的大腿和小腿已经死活挪不动了。 赛后，我的内心又回荡着一句活————我还是小看了全马了啊。 总结一下此次比赛的一些经验和教训： 1、衣服就是短裤和衬衣，要买轻便速干的，千万不要穿长裤，喷气雾都不方便。2、跑步之前剪脚指甲，不然袜子肯定坏。3、发的雨衣就是用来跑之前保暖的。4、发的袋子要带去比赛现场，存东西用的。5、内裤要宽松。6、马拉松对心肺功能没啥要求，如果目标是跑完的话，不会感到喘不过气来。 平时还是要多锻炼，明年的马拉松，我一定会跑完。]]></content>
+      <categories>
+        <category>生活记录</category>
+      </categories>
+      <tags>
+        <tag>马拉松</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[成都印象]]></title>
+    <url>%2Fposts%2F33049aaa.html</url>
+    <content type="text"><![CDATA[因为工作的关系，前些天去成都出差一个星期。 这是我第一次来成都。俗话说，“少不入川，老不出蜀”，对于成都这座城市，有太多的内容可以书写。短短的一个星期的时间，只能够浮光掠影的体验一番，即使如此，也给我留下了一个美好的印象。 繁华由于住的地方就在市中心，近距离的体验了一番成都的繁华景象。春熙路上人流如织，路两边有各种大百货商店和名牌专卖店以及美食店。来来往往的情侣和小姑娘们往往三两成群，用听不太懂的川音交流着。路两边的播放着各种促销信息，店员站在门口不但喊着，还不停的拍着手吸引人们的注意。空气中不时传来美食的气息，一派热闹繁华的景象。 论起繁华的程度来，感觉不比北京、上海差，毕竟也是一个省的都会所在。如果用一句话来总结的话，你在其他地方能买到的东西都能在这里买到。 美食这次出去吃饭的时候虽然不多，但是我发现了一个有意思的地方：基本上好吃点的饭店都需要排队。饭店门外有专门的给排队的客人坐的椅子。各种各样的美食都有，还是拿春熙路举例，一般来说，购物街是商业最繁华的地方，美食店最多只能算是点缀, 不会太多，可成都不一样。据我目测，在春熙路上的购物店和美食店能达到2：1的比例。成都人对吃的喜好可见一斑。要说哪种美食最多，肯定是火锅。四川的火锅全国出名，可惜我这几年对火锅的兴趣不大，不然肯定要尝尝。至于其它的食物，我发现成都人吃兔子头和兔肉很多，可惜我都不感冒。这次对于美食的收获，在于吃了正宗的水煮肉片。一直想尝尝正宗的水煮肉片是什么样的，在美团上找了个排名第二的私房菜餐馆，专门点了水煮肉片。至于感受，只能说没有达到我心目中的水平，感觉和本地吃的没啥区别甚至还不如。我发现我非常适应四川的饮食，别的小伙伴们都喊辣的时候，我居然没啥感觉，哈哈。 景点这次时间很紧，抽空去了几个比较近的景点：武侯祠、宽窄巷子、锦里。武候祠跟园林一样，到处是树，加上湿润的空气，是个休养的好地方。我对武侯祠不太满意的地方是把诸葛亮修的太像神佛了。是修的像神佛，从布局到造型，无一不像个庙宇里的神仙，不太像个先贤或者人。 宽窄巷子和锦里比较像，都是购物吃饭一条街，和西安的回民一条街功能类似，但是感官上比西安的那一条街强太多了。这两个地方，所有的建筑都是仿古的，门牌也是一样，古香古色的，很有文化氛围。吃饭娱乐也便宜，一场戏30块钱送茶水，采耳30左右。和逛西安那一条街疲累的感觉完全一样，在这里，逛累了你就可以随便进个茶馆喝壶茶休息一下，很有生活的氛围。茶馆在不表演戏剧的时候有暖场的驻唱，据说很多都是川音的学生，虽然没啥名气但是水平不低。一个驻唱小哥唱的钟鼓楼让我现在都没忘。宽窄巷子让我印象最深的地方，是有三个书店。像这种来成都必去的地方，一个摊位用寸土寸金来形容一点不为过。就是这样的地方，我居然看到了三个书店，让我对成都人的文化理念和传承肃然起敬。再联想到四川省图书馆和科技馆建在最繁华的市中心，四川人对文化的重视让我印象深刻。 生活四川号称”天府之国”，成都做为四川的中心，无论在气候和人文上，都是一座非常适合生活的城市。城市里绿化的非常好，整个城市里随处可闻到芙蓉花的香气，人们的生活节奏也不快。印象最深的还是市中心的人民公园，树木郁郁葱葱，遮天蔽日，配合成都特有的湿润气候，空气非常的清新。据说成都一年最多有100来天的晴天，本地人没有足够的日照时间，造成了两个结果：1、四川人普遍很矮，2、四川人爱吃辣以驱湿气（都是导游说的）。反正我来到成都之后才发现原来我的个子是这么的高，哈哈。如果说四川什么最多，我感觉就是茶馆和戏院。这个多是和其它地方相比的，感觉就是这两个地方随处可见一样。这次时间紧没去听，下次再去一定补上。 酒吧赵雷的一首《成都》，让我在成都的这几天里总是忍不住啍起，其实我是真想去雨林路的小酒馆去看看，可最终没有成行。四川的酒吧非常出名，也很集中，因为是川音的所在地，酒吧的驻唱水平很高。留待下次再去体会吧。 这几天一直想写篇文章来纪念这次的成都之行，生怕时间一长就忘记了，所幸终于写完。写的很简略，再有想起需要写的地方，再补上吧。]]></content>
+      <categories>
+        <category>生活记录</category>
+      </categories>
+      <tags>
+        <tag>游记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[解决hexo的本地搜索一直加载的问题]]></title>
+    <url>%2Fposts%2F59beec89.html</url>
+    <content type="text"><![CDATA[最近发现hexo的搜索出现了问题，在点击搜索后，搜索框一直在转圈，就是出不来。 在网上搜索了一下，问题的根源在于hexo生成的search.xml有问题，里面含有非法字符。 这个问题看似很好解决，把非法字符删除不就行了么，为什么要再写一篇文章呢？ 主要原因是，网上的解决方案，方法是对的，但是没说清楚要在哪里删除这些非法字符。直接在search.xml里删除是不行的，因为重新生成文章后，非法字符还是会出现。 下面是正确的解决方案： 根据提示，找到出现问题的那篇文章。然后修改此文章的源文件（.md格式），把里面的非法字符删除就可以了。]]></content>
+      <categories>
+        <category>网络服务</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[安装macos 10.11.6]]></title>
+    <url>%2Fposts%2F1cd3c366.html</url>
+    <content type="text"><![CDATA[今天重新拾起久违的黑苹果，比较顺利的安装成功了,记录一下经过。 电脑配置：cpu: E3-1230 V3主板：技嘉B85-HD3 rev.2.1内存：32G显卡：技嘉GTX 650 Ti Boost显示器： Dell U2515H 为什么选择Mac OS 10.11.6？黑苹果，并不是系统版本越新越好，最适合你电脑的那个才是最好的。以前我就犯了盲目追求新版本的错误，导致很完美的配置变得不能用了。对于我的电脑来说，El Capitan是能够完美的版本。到10.12之后，各种问题：显卡不免驱了、声音驱动不正常、睡眠唤醒有问题。而10.11.6只需要一个fakesmc和网卡驱动就可以了，其他一切正常。所以，除非以后换电脑，我就坚守在这一个版本上了。 关于clover选择的问题对于我的电脑来说，clover 2.3-3577版本非常完美，默认配置就能够直接进行安装了，不需要其他任何设置。相反，clover最新4xxx版本就不可以。所以说，clover选对版本也是非常重要的。 关于网卡驱动RTL8111型号的网卡是非常好驱动的，但是如果发现驱动不了，最好是重新找一个，网上版本很多，基本换上两次就能找到合适的了。 开启Trim两种方法，推荐使用的clover配置文件的方法。因为据网上说法，终端用命令让osx开启TRIM会有五国的风险，而clover是开启一次设置永远无忧。 使用命令行：sudo trimforce enable 使用clover配置使用Clover Configurator打开clover配置文件，在Kernel and Patches–KextsToPatch里，点击下方的+号： Name: IOAHCIBlockStorage Find[HEX]: 4150504C452053534400 Replace*HEX: 00000000000000000000 保存就可以了如下图所示: B85-HD3的realtek ALC892声卡如何驱动感谢国内外黑苹果达人的努力，以前死活驱动不了的ALC892声卡终于完美驱动了。之所以说完美驱动了，是因为以下几个原因：1、睡眠唤醒后声卡无爆音2、插入耳机后，自动切换到耳机；拔出耳机后，自动切换到扬声器。 方法如下：1、下载AppleALC和lilu下载AppleALC: https://github.com/acidanthera/AppleALC/releases我下载的是1.3.1版本下载Lilu:https://github.com/acidanthera/Lilu/releases我下载的是1.2.6版本 2、把AppleALC.kext和Lilu.kext放在/EFI/CLOVER/kexts/Other里 3、修改clover的配置文件config.plist，在Device的Audio部分改成如下内容： 123456&lt;key&gt;Audio&lt;/key&gt;&lt;dict&gt; &lt;key&gt;Inject&lt;/key&gt; &lt;integer&gt;92&lt;/integer&gt;&lt;/dict&gt;auto B85-HD3只有注入92才可以耳机、扬声器自动切换，其他ID不行。 自从把ALC892驱动后，睡眠唤不醒的现象再也没有发生过。 提供本文的config和kexts下载下载附件]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>macos</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Blackarch常见问题的解决]]></title>
+    <url>%2Fposts%2Fc0cd9028.html</url>
+    <content type="text"><![CDATA[尝试了一下 Blackarch，把遇到的问题记录一下。 开机后没有网络连接的问题启动系统的 wicd 服务就可以了： 12systemctl start wicd.servicesystemctl enable wicd.service 正确的系统升级方法如果使用 arch 的pacman -Syu命令，就会发现提示软件冲突。正确的系统升级命令如下：pacman -Syyu --needed --overwrite &#39;*&#39; blackarch]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>blackarch</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[更改Python中pip的安装源]]></title>
+    <url>%2Fposts%2Ffeebb727.html</url>
+    <content type="text"><![CDATA[在使用pip安装python的软件时，速度实在是太慢了，而且经常连接断开。经过在网上的一番搜索，找到了解决办法： Windows系统在user目录中创建一个pip目录，如：C:\Users\xx\pip，然后在pip目录下新建一个文件名为pip.ini，内容如下： 1234[global]index-url = https://pypi.tuna.tsinghua.edu.cn/simple[install]trusted-host=mirrors.aliyun.com Linux系统在用户目录下新建一个.pip文件夹，然后在此文件夹下新建一个名为pip.conf的文件，例如：~/.pip/pip.conf，内容同上。 PS：清华大学的这个软件源速度是真的快，而且是联通、电信、移动三网速度都快,下载基本满速，推荐使用。]]></content>
+      <categories>
+        <category>编程实践</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[解决vmware提示“No 3D support is available from the host”的问题]]></title>
+    <url>%2Fposts%2F8fa071eb.html</url>
+    <content type="text"><![CDATA[这个问题出现在linux下使用开源显卡驱动的情况下，解决也很简单。 打开文件home目录下的配置文件 gedit $HOME/.vmware/preferences 在文件的最后添加如下内容： mks.gl.allowBlacklistedDrivers = &quot;TRUE&quot; 问题解决。]]></content>
+      <categories>
+        <category>软件应用</category>
+      </categories>
+      <tags>
+        <tag>vmware</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Windows下SoftRaid使用体验]]></title>
+    <url>%2Fposts%2F86815a05.html</url>
+    <content type="text"><![CDATA[一直以来，听说在 windows 下组建 SoftRaid 可以有效的提高硬盘读写性能。我虽然知道这个黑科技，但是没有实践过。前段时间折腾电脑，想起这个事，不如就实际体验一下，看看到底组建 Raid0 和使用独立硬盘有什么差别。 经过大约两周的使用，我对 SoftRaid 的一些日常使用情况有了初建的了解，下面回答一下大家比较关心的一些问题。 组建 SoftRaid 后，重装系统能不能找到 Raid 分区？答案是：可以。重装系统后，如果看不到 SoftRaid 分区，在磁盘管理器里给 SoftRaid 分配一个盘符就可以了。 组建 SoftRaid 后，读写性能有没有提升？答案是：有，但是相当于没有。为什么这么说呢？网上各种评测，组建 Raid0 后，读写速度翻倍。但是对于日常使用来说，我是 7200 转的 2T 硬盘，平时没有经常 copy 文件的操作，单个硬盘速度完全够用，组建 softraid 后，纯属多此一举。 组建 SoftRaid 后，有哪些缺点？最明显的缺点，播放视频时，会有卡顿。这种卡顿，在使用单硬盘的时候，从来没有遇到过。其实也可以理解，毕竟涉及到两块硬盘的同步操作。 是否推荐组建 SoftRaid？答案是：不推荐。1、组建 SoftRaid 后，明显操作出现卡顿。2、SoftRaid 提升的那些读写速度，日常根本用不到，单硬盘足够。3、Raid0 数据写在两块硬盘，不如使用单块硬盘安全。 所以结论是，没有必要组建 SoftRaid。]]></content>
+      <categories>
+        <category>硬件设备</category>
+      </categories>
+      <tags>
+        <tag>windows</tag>
+        <tag>raid</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[npm使用淘宝镜像]]></title>
+    <url>%2Fposts%2Fef248641.html</url>
+    <content type="text"><![CDATA[把 npm 软件源换成淘宝的镜像地址，能有效的提高速度，下面说下具体方法。 临时使用npm --registry https://registry.npm.taobao.org install express 永久使用npm config set registry https://registry.npm.taobao.org 配置后可npm config get registry或npm info express]]></content>
+      <categories>
+        <category>编程实践</category>
+      </categories>
+      <tags>
+        <tag>nodejs</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[kali下安装配置Chrome/Chromium]]></title>
+    <url>%2Fposts%2F8cd312b.html</url>
+    <content type="text"><![CDATA[Kali 默认用户是 root，而 chrome 默认是不支持在 root 用户下使用的，这就导致必须修改 chrome 的设置，才能让 chrome 在 kali 下运行。 网上有很多文章介绍如何修改，但是没有一个说到点子上的，今天发现了一篇文章，完美的解决了 chrome 在 kali 下运行问题。 安装 chromium我们安装 chromium 而不是 chrome,感觉修改起来更方便。 apt install chromium 修改 chromium 的配置文件vi /etc/chromium.d/default-flags 添加下面的内容： 12345# Run as root Kaliexport CHROMIUM_FLAGS="$CHROMIUM_FLAGS --password-store=detect --no-sandbox --user-data-dir"# Disable Chromium security features for web app testingexport CHROMIUM_FLAGS="$CHROMIUM_FLAGS --disable-web-security" 上面的配置有两个作用：1、让 chromium 以 root 运行。2、安装 chromium 的安全特性，可以进行一些基于 DOM 的 xss 安全测试。 chromium 以代理模式运行chromium --proxy-server=&quot;socks5://localhost:1080&quot; 同样的配置应该对 Chrome 同样起作用，但是没有测试。]]></content>
+      <categories>
+        <category>软件应用</category>
+      </categories>
+      <tags>
+        <tag>kali</tag>
+        <tag>chrome</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Excel修改默认字体的正确方法]]></title>
+    <url>%2Fposts%2Ff5ccc4ae.html</url>
+    <content type="text"><![CDATA[网上搜索一下如何修改 Excel 的默认字体,基本上都是打开文件–选项-常规,然后修改自己想要的默认字体,保存就行了。似乎很简单的样子？ 然而事实是,如果你新建一个 excel 文件后就会发现,依然还是原来的字体,这是怎么回事呢? 等来看两张图： 一个是新建工作簿，一个是新建工作表，这两个是不一样的。 其实，桌面右键新建 excel 工作表的时候，是复制了一份现有的 excel 工作表模板。这个模板的名字是EXCEL12，位于C:\Windows\ShellNew里边。 因此，正确的修改 Excel 字体的方法是： 1、打开 Excel-文件-选项-常规-新建工作簿时-修改默认字体&amp;字号-保存-关闭 Excel。 2、打开电脑左下角-开始-所有程序-Excel-新建空白工作簿-另存到桌面-修改名称为EXCEL12 3、打开位置C:\Windows\ShellNew，把桌面上新建的EXCEL12复制进去就可以了。]]></content>
+      <categories>
+        <category>软件应用</category>
+      </categories>
+      <tags>
+        <tag>excel</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Linux虚拟机安装vmware tools的正确方法]]></title>
+    <url>%2Fposts%2F1e4f9aaa.html</url>
+    <content type="text"><![CDATA[vmware对Linux虚拟机的显卡驱动支持可以说是最完善的，不但有二进制编译包可用，开源的open-vm-tools也走进了各大主流的Linux发行版。 但是我从来都是使用官方的二进制包来安装，宁可麻烦点也不愿用开源vmware驱动，主要是因为我发现使用开源驱动后，桌面依然不能自适应分辨率，无法全屏，无法和Host拖文件分享，安装了开源驱动和不安一个样。 直到有一天我发现，一直以来我误会open-vm-tools了，出现上述问题是因为开源驱动没安装完整。 只安装open-vm-tools是不行的，还需要安装open-vm-tools-desktop才可以。这样才是完整的vmware开源驱动的安装方法。有些发行版还会提供open-vm-tools-dkms，请一并安装上。 在ubuntu下安装： 1sudo apt install open-vm-tools open-vm-tools-desktop open-vm-tools-dkms]]></content>
+      <categories>
+        <category>软件应用</category>
+      </categories>
+      <tags>
+        <tag>vmware</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Git日常使用总结]]></title>
+    <url>%2Fposts%2Fe07c0f55.html</url>
+    <content type="text"><![CDATA[本文用来记录在日常使用 Git 中学到的一些知识点，长期更新。 常规设置设置 Git 账号的邮箱和用户名这是使用 Git 的第一步，如果没有设置，根本用不了 Git。 12git config --global user.email &quot;you@example.com&quot;git config --global user.name &quot;Your Name&quot; 生成 SSH 密钥ssh-keygen -t rsa -b 4096 -C &quot;your_email@example.com&quot; Git 子模块操作Git 克隆含有子模块的仓库如果一个 Git 仓库含有子模块（submodule），现在想要在克隆主仓库的时候，想要一并克隆子模块，则在git clone命令加上--recursive参数即可。例如：git clone --recursive https://github.com/chaconinc/MainProject 子模块更新之后同步操作如果更新了 submodule，然后更新了父项目中依赖的版本号,则在同步的时候,需要在 git pull之后，调用git submodule update来更新 submodule 信息。 如果在git pull之后，忘记了调用git submodule update，那么极有可能再次把旧的 submodule 依赖信息提交上去。 因此,正确的同步子模块的步骤是:1、在父目录执行git pull2、执行git status，查看子模块是否有修改3、执行git submodule update，来更新子模块。 子模块修改和提交默认情况下，git submodule update 并不会将 submodule 切到任何 branch，因此 submodule 的 HEAD 是处于游离状态的 (‘detached HEAD’ state)。所以在修改前，记得一定要用 git checkout master 将当前的 submodule 分支切换到 master，然后才能做修改和提交。 因此，正确的修改和提交流程是：1、对 submodule 做一些修改2、切到 submodule 的目录3、执行git checkout master4、执行 commit 和 push 命令。]]></content>
+      <categories>
+        <category>软件应用</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[如何自学日语]]></title>
+    <url>%2Fposts%2F6f33662.html</url>
+    <content type="text"><![CDATA[在知乎上看到一篇文章，觉得很有道理，总结整理一下。 原文在这里。 学习日语的最终目的 有兴趣，有压力，学得就快。 只是为了考级的话，没有任何意义。 真正的二级，对于日本动漫和小说，能看懂60%左右。如果是柯南、高达之类的，会更低。 如果有足够的毅力坚持到看懂生肉动漫，考级都是小意思。 学习日语的几个误区 学习语言是长期过程，短期提高不可能？这是典型的误区，语言可以短期提高。用对方法的话，每天三个小时，半年过二级。 中国人学日语有优势？汉语和日语是两种语言，一定要重新学习。对于日语中的汉字，都要弄懂，不然某个阶段就不学不动了。 单词和语法哪个难？都不难。语法不过是带参数的单词，单词是参数，语法是函数。搞清楚了参数的集合，语法和单词其实都一样。 一级单词现在不背也行？单词只分两类：记得住的和记不住的；或者另一种分类方法：用得到的和用不到的。 你用得到的并记住了的单词（恭喜你，这是你的学习成果） 你用得到的但还没记住的单词（这是你需要努力的） 你用不到的却记住了的单词（忘掉了也不用担心的部分） 你用不到的也没记住的单词（爱咋地咋地） 所以不要管单词是几级的，用得到就下功夫背下来，用不上先放着，用到的时候回来背。 初级先学读写，等学高级时再补听力和口语？同一个单词，听到之后记住的比只是看到记住的快很多很多。所以听说读写并行学习的效率最高。 一个单词多个意思，会一个意思也算这个单词会？类似于数据库，有一对多的情况，都是分成多条记录存储，人脑也差不多。 因此将多个意思的同一个单词当作多个单词来记才是正确的做法。这样一方面不会漏记，另一方面会有很大的成就感。 初级找个一般的老师，高级找个好老师？恰恰相反，初级一定要找个好的，打基础打牢，高级了自学都行。真要遇到难点上网找母语的日本人问问，基本没什么解决不了的。 日语发音没有四声，差不多就行？发音很重要，有时候比词汇量都重要，这直接关系到你的日语是不是标准。所以发音一开始就要打好基础，后期很难纠正。 学习外语只需要死记，不需要动脑？外语学习动脑非常重要，要多总结，能减少很多的记忆量。 学完xx课程，就能达到xx级？同样的课程，人与人掌握的是不一样的。 不要迷信xx课程给的评级，什么课程呀、书啊都是浮云，自己真正的掌握，才是硬道理。 效率高，容易累的学习方法找一本好教材，必须带音频资料推荐《大家的日本语》。原因是日本人编写的，有错也是日本人犯的错，都犯那就不叫错了。 也可自选教材，标准是能看进去，不会越看头也大。再好的教材，看不进去也是白搭。 找一个复试软件背单词、练口语很有用。 每开始一课，首先不要看课，先看课后的单词和语法。如果使用《大家的日本语》，相当于只看指导书。 把单词和语法先背下来背单词的时候要听着录音背。 具体背单词的步骤是：1、一边听录音，一边看单词，同时看解释，尽量记住。能记几个算几个，不要有压力，不要赶进度，尽量把单词的读音、字型、变形、意思搞清楚。这样反复几次。 2、只听录音，不看书，进行听写，同时回忆单词的意思。尽量写，有写不出的或者不确定的，要标记好。 3、所有单词听写一遍后，统计不会的单词。所有不会的，不确定的单词，单独列一个表，重点背诵。 4、重复以上几步，直到所有单词都能准确听写出来。最终目标是在单词正常播放速度下，所有单词都能会写和回忆出意思。 5、根据解释回想单词，并大声朗读，提高口语最好是能够对照着录音纠正发音。 6、每周把本周学过的单词检查一遍。检查的方法是，所有单词按步骤2听写一遍.不熟练的再列个生词表。下周复习时把这些生词和新学的单词一起复习。 复习两次没问题的，可以从生词表里去掉。维护好生词表可以很大程度提高背单词的效率。 单词和语法没问题后，开始听写课文听写课文是整个方法中 最重要的一个环节。 第一遍，不要停顿，连续听完一句或者一段话。这时候有几种情况： 大体能听懂，细节不清楚这种情况下，不要连续反复听，而是要根据自己掌握的语法和单词尝试去造句，然后再和录音对照。如果发现自己造的句子怎么听都和录音对不起来，则反复听这一部分，直到改对了为止。 部分能听懂，有几个地方听不出来这种情况下，先把能听懂的部分写出来，听不不出来的地方反复听，甚至减速听。如果听不懂但是大概知道是什么音，则根据音把假名写出来。 完全听不懂这种情况下，就反复听，直到变成上面两种情况的一种。这里的 反复听是指50遍以上。 打开书对照听写内容这里，不是简单的对照正确和错误，要分析出错的原因： 1、如果是单词错了，则把错误单词加入到生词表里，反复练习。2、如果是语法错了，则再重新学习一遍语法。 课后练习题认真完成课后练习可以巩固学到的知识。 对照课后练习答案检查的时候，也要认真分析错误的原因，不能简单的归结到马虎，因为马虎是掌握不熟练的表现。 尝试写作文头两个星期，可能写不出东西；两个星期后，要坚持写，哪怕是写流水账，每周至少写一篇。 关于听写材料的问题，刚开始语法和单词掌握的少，课本可能是最好的材料，当达到一定程度后，可以尝试听写日剧、动漫的内容了。 要不断的鼓励自己不用管别人说什么，自己有一点成就也是很大的进步。 学习的路上没有笨蛋。无论进度多么慢，只要不停下来都是好汉。只有中断的人才是笨蛋！ 关于考级考级是对自己所学东西的一个检测，一定不要为了考级去学习。 拿一个与自己能力不符的证明在身上，只会成为你的包袱和累赘，不会给你带来任何好处。]]></content>
+      <categories>
+        <category>外语学习</category>
+      </categories>
+      <tags>
+        <tag>日语</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Windows下搭建一个完整的Hexo博客]]></title>
+    <url>%2Fposts%2F138c93e5.html</url>
+    <content type="text"><![CDATA[Hexo 安装和部署的设置安装基本运行环境hexo 依赖 Node.js 和 git。因此，在 windows 下安装 hexo，首先要做的就是把这两个软件安装上。 Node.js 的下载地址在这里，安装 8.11.1LTS 版本即可。 Git 的下载地址在这里，安装时一路默认即可。 安装并初始化 hexo1、 安装 hexo npm install -g hexo-cli 2、初始化一个 hexo 目录 1234hexo init &lt;folder&gt;cd &lt;folder&gt;npm installgit init 安装 hexo 的插件有几个插件是必装的: 通过 git 部署： npm install hexo-deployer-git --save 生成文章唯一链接： npm install hexo-abbrlink --save 生成 sitemap： npm install hexo-generator-sitemap --save 生成网站搜索： npm install hexo-generator-searchdb --save 具体的用法以后再讲。 安装 hexo 主题我用的是 Next 主题，地址在这里。 发布 hexo 网站到 Github Pages 上假设你的 Github 用户名是 username，则在 github 上新建一个名为 username.github.io 的库。 在 hexo 的_config.yml里，添加如下设置： 123456# Deployment## Docs: https://hexo.io/docs/deployment.htmldeploy: type: git repo: git@github.com:username/username.github.io.git branch: master 此时，运行hexo g, hexod就可以把本地网站部署网站到 github 上了。 至此，一个 hexo 的本地网站就搭建起来了。 Hexo 多台电脑同步维护的设置有时候想要在不同的电脑上来维护 Hexo 博客，应该怎么操作呢？ 这时候可以利用 github 的分支功能，来实现同一个 github 仓库里，网站的源文件和生成页面文件分别存储的功能。 假设两台电脑 A 和 B，A 已经搭建好了一个 Hexo 博客并成功部署到 github 上，现在想在 B 电脑上也能维护此博客： 在 A 电脑上操作：1、在 hexo 博客目录下初始化 git，并添加远程仓库地址: 12git initgit remote add origin git@github.com:username/username.github.io.git 2、创建一个 source 分支，并把源文件提交到 source 分支上： 1234git checkout -b sourcegit add .git commit -m &apos;add source&apos;git push origin source 至此，已经把 hexo 博客的源文件保存到 github 的 source 分支上了。 3、在 github 上，把 source 分支设置为主分支，具体在 Settings–&gt;Branches 里设置。 在 B 电脑上操作：B 电脑上要确认已经安装完 Node.js、Git,并使用 npm 安装 hexo。 1、克隆网站源文件： git clone git@github.com:username/username.github.io.git &lt;folder&gt; 2、进入到,并安装依赖: npm install 执行npm install，会把package.json里所包含的在 A 电脑上安装的插件一并安装好。因此，不需要重复执行 A 电脑上的安装各个插件的命令。 B 电脑上所有的环境至此都已经搭建完成。 Hexo 自定义域名设置网上很多教程都是使用域名的 A 记录来设置自定义域名，其实根据 github 的建议，是使用类似于www.example.com这样的二级自定义域名。这样做的好处是可以让 github 自动选择离你最近的服务，有点类似于 CDN 加速。 域名 DNS 供应商设置把你想使用的自定义二级域名指向 github pages 仓库，只需要一条 CNAME 记录就可以了。 例如： 1www.example.com username.github.io hexo 里添加 CNAME 文件新建一个 CNAME 文件，放在博客根目录下的 source 目录里，内容如下：www.example.com放在 source 目录下，可以在每次使用hexo g生成网站的时候，自动生成 CNAME 文件。]]></content>
+      <categories>
+        <category>网络服务</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+        <tag>hexo</tag>
+      </tags>
+  </entry>
+</search>
